@@ -1,0 +1,80 @@
+diff --git a/node_modules/react/cjs/react.development.js b/node_modules/react/cjs/react.development.js
+index 8735990..6cc608f 100644
+--- a/node_modules/react/cjs/react.development.js
++++ b/node_modules/react/cjs/react.development.js
+@@ -1621,6 +1621,11 @@ function useState(initialState) {
+   var dispatcher = resolveDispatcher();
+   return dispatcher.useState(initialState);
+ }
++function useBetterState(initialState) {
++  var dispatcher = resolveDispatcher();
++  const [get, set] = dispatcher.useState(initialState);
++  return {get, set};
++}
+ function useReducer(reducer, initialArg, init) {
+   var dispatcher = resolveDispatcher();
+   return dispatcher.useReducer(reducer, initialArg, init);
+@@ -2724,6 +2729,7 @@ exports.useMemo = useMemo;
+ exports.useReducer = useReducer;
+ exports.useRef = useRef;
+ exports.useState = useState;
++exports.useBetterState = useBetterState;
+ exports.useSyncExternalStore = useSyncExternalStore;
+ exports.useTransition = useTransition;
+ exports.version = ReactVersion;
+diff --git a/node_modules/react/cjs/react.production.min.js b/node_modules/react/cjs/react.production.min.js
+index c2b2f77..6b29134 100644
+--- a/node_modules/react/cjs/react.production.min.js
++++ b/node_modules/react/cjs/react.production.min.js
+@@ -23,4 +23,4 @@ exports.cloneElement=function(a,b,e){if(null===a||void 0===a)throw Error("React.
+ for(var m=0;m<f;m++)g[m]=arguments[m+2];d.children=g}return{$$typeof:l,type:a.type,key:c,ref:k,props:d,_owner:h}};exports.createContext=function(a){a={$$typeof:u,_currentValue:a,_currentValue2:a,_threadCount:0,Provider:null,Consumer:null,_defaultValue:null,_globalName:null};a.Provider={$$typeof:t,_context:a};return a.Consumer=a};exports.createElement=M;exports.createFactory=function(a){var b=M.bind(null,a);b.type=a;return b};exports.createRef=function(){return{current:null}};
+ exports.forwardRef=function(a){return{$$typeof:v,render:a}};exports.isValidElement=O;exports.lazy=function(a){return{$$typeof:y,_payload:{_status:-1,_result:a},_init:T}};exports.memo=function(a,b){return{$$typeof:x,type:a,compare:void 0===b?null:b}};exports.startTransition=function(a){var b=V.transition;V.transition={};try{a()}finally{V.transition=b}};exports.unstable_act=X;exports.useCallback=function(a,b){return U.current.useCallback(a,b)};exports.useContext=function(a){return U.current.useContext(a)};
+ exports.useDebugValue=function(){};exports.useDeferredValue=function(a){return U.current.useDeferredValue(a)};exports.useEffect=function(a,b){return U.current.useEffect(a,b)};exports.useId=function(){return U.current.useId()};exports.useImperativeHandle=function(a,b,e){return U.current.useImperativeHandle(a,b,e)};exports.useInsertionEffect=function(a,b){return U.current.useInsertionEffect(a,b)};exports.useLayoutEffect=function(a,b){return U.current.useLayoutEffect(a,b)};
+-exports.useMemo=function(a,b){return U.current.useMemo(a,b)};exports.useReducer=function(a,b,e){return U.current.useReducer(a,b,e)};exports.useRef=function(a){return U.current.useRef(a)};exports.useState=function(a){return U.current.useState(a)};exports.useSyncExternalStore=function(a,b,e){return U.current.useSyncExternalStore(a,b,e)};exports.useTransition=function(){return U.current.useTransition()};exports.version="18.3.1";
++exports.useMemo=function(a,b){return U.current.useMemo(a,b)};exports.useReducer=function(a,b,e){return U.current.useReducer(a,b,e)};exports.useRef=function(a){return U.current.useRef(a)};exports.useState=function(a){return U.current.useState(a)};exports.useBetterState=function(a){const [get, set] = U.current.useState(a); return {get, set}};exports.useSyncExternalStore=function(a,b,e){return U.current.useSyncExternalStore(a,b,e)};exports.useTransition=function(){return U.current.useTransition()};exports.version="18.3.1";
+diff --git a/node_modules/react/umd/react.development.js b/node_modules/react/umd/react.development.js
+index 37b38b3..5b22020 100644
+--- a/node_modules/react/umd/react.development.js
++++ b/node_modules/react/umd/react.development.js
+@@ -1611,6 +1611,11 @@
+     var dispatcher = resolveDispatcher();
+     return dispatcher.useState(initialState);
+   }
++  function useBetterState(initialState) {
++    var dispatcher = resolveDispatcher();
++    const [get, set] = dispatcher.useState(initialState);
++    return {get, set};
++  }
+   function useReducer(reducer, initialArg, init) {
+     var dispatcher = resolveDispatcher();
+     return dispatcher.useReducer(reducer, initialArg, init);
+@@ -3336,6 +3341,7 @@
+   exports.useReducer = useReducer;
+   exports.useRef = useRef;
+   exports.useState = useState;
++  exports.useBetterState = useBetterState;
+   exports.useSyncExternalStore = useSyncExternalStore;
+   exports.useTransition = useTransition;
+   exports.version = ReactVersion;
+diff --git a/node_modules/react/umd/react.production.min.js b/node_modules/react/umd/react.production.min.js
+index 9f467ca..a900ff3 100644
+--- a/node_modules/react/umd/react.production.min.js
++++ b/node_modules/react/umd/react.production.min.js
+@@ -27,5 +27,5 @@ t;c.act=ka;c.cloneElement=function(a,b,c){if(null===a||void 0===a)throw Error("R
+ Array(f);for(var g=0;g<f;g++)l[g]=arguments[g+2];e.children=l}return{$$typeof:y,type:a.type,key:d,ref:k,props:e,_owner:h}};c.createContext=function(a){a={$$typeof:wa,_currentValue:a,_currentValue2:a,_threadCount:0,Provider:null,Consumer:null,_defaultValue:null,_globalName:null};a.Provider={$$typeof:va,_context:a};return a.Consumer=a};c.createElement=Z;c.createFactory=function(a){var b=Z.bind(null,a);b.type=a;return b};c.createRef=function(){return{current:null}};c.forwardRef=function(a){return{$$typeof:xa,
+ render:a}};c.isValidElement=M;c.lazy=function(a){return{$$typeof:Aa,_payload:{_status:-1,_result:a},_init:ra}};c.memo=function(a,b){return{$$typeof:za,type:a,compare:void 0===b?null:b}};c.startTransition=function(a,b){b=J.transition;J.transition={};try{a()}finally{J.transition=b}};c.unstable_act=ka;c.useCallback=function(a,b){return g.current.useCallback(a,b)};c.useContext=function(a){return g.current.useContext(a)};c.useDebugValue=function(a,b){};c.useDeferredValue=function(a){return g.current.useDeferredValue(a)};
+ c.useEffect=function(a,b){return g.current.useEffect(a,b)};c.useId=function(){return g.current.useId()};c.useImperativeHandle=function(a,b,c){return g.current.useImperativeHandle(a,b,c)};c.useInsertionEffect=function(a,b){return g.current.useInsertionEffect(a,b)};c.useLayoutEffect=function(a,b){return g.current.useLayoutEffect(a,b)};c.useMemo=function(a,b){return g.current.useMemo(a,b)};c.useReducer=function(a,b,c){return g.current.useReducer(a,b,c)};c.useRef=function(a){return g.current.useRef(a)};
+-c.useState=function(a){return g.current.useState(a)};c.useSyncExternalStore=function(a,b,c){return g.current.useSyncExternalStore(a,b,c)};c.useTransition=function(){return g.current.useTransition()};c.version="18.3.1"});
++c.useState=function(a){return g.current.useState(a)};c.useBetterState=function(a){ const [get, set] = g.current.useState(a); return {get, set}};c.useSyncExternalStore=function(a,b,c){return g.current.useSyncExternalStore(a,b,c)};c.useTransition=function(){return g.current.useTransition()};c.version="18.3.1"});
+ })();
+diff --git a/node_modules/react/umd/react.profiling.min.js b/node_modules/react/umd/react.profiling.min.js
+index 05bd5a1..00ed0f7 100644
+--- a/node_modules/react/umd/react.profiling.min.js
++++ b/node_modules/react/umd/react.profiling.min.js
+@@ -27,5 +27,5 @@ t;c.act=ka;c.cloneElement=function(a,b,c){if(null===a||void 0===a)throw Error("R
+ Array(f);for(var g=0;g<f;g++)l[g]=arguments[g+2];e.children=l}return{$$typeof:y,type:a.type,key:d,ref:k,props:e,_owner:h}};c.createContext=function(a){a={$$typeof:wa,_currentValue:a,_currentValue2:a,_threadCount:0,Provider:null,Consumer:null,_defaultValue:null,_globalName:null};a.Provider={$$typeof:va,_context:a};return a.Consumer=a};c.createElement=Z;c.createFactory=function(a){var b=Z.bind(null,a);b.type=a;return b};c.createRef=function(){return{current:null}};c.forwardRef=function(a){return{$$typeof:xa,
+ render:a}};c.isValidElement=M;c.lazy=function(a){return{$$typeof:Aa,_payload:{_status:-1,_result:a},_init:ra}};c.memo=function(a,b){return{$$typeof:za,type:a,compare:void 0===b?null:b}};c.startTransition=function(a,b){b=J.transition;J.transition={};try{a()}finally{J.transition=b}};c.unstable_act=ka;c.useCallback=function(a,b){return g.current.useCallback(a,b)};c.useContext=function(a){return g.current.useContext(a)};c.useDebugValue=function(a,b){};c.useDeferredValue=function(a){return g.current.useDeferredValue(a)};
+ c.useEffect=function(a,b){return g.current.useEffect(a,b)};c.useId=function(){return g.current.useId()};c.useImperativeHandle=function(a,b,c){return g.current.useImperativeHandle(a,b,c)};c.useInsertionEffect=function(a,b){return g.current.useInsertionEffect(a,b)};c.useLayoutEffect=function(a,b){return g.current.useLayoutEffect(a,b)};c.useMemo=function(a,b){return g.current.useMemo(a,b)};c.useReducer=function(a,b,c){return g.current.useReducer(a,b,c)};c.useRef=function(a){return g.current.useRef(a)};
+-c.useState=function(a){return g.current.useState(a)};c.useSyncExternalStore=function(a,b,c){return g.current.useSyncExternalStore(a,b,c)};c.useTransition=function(){return g.current.useTransition()};c.version="18.3.1"});
++c.useState=function(a){return g.current.useState(a)};c.useBetterState=function(a){const [get, set] = g.current.useState(a); return {get, set}};c.useSyncExternalStore=function(a,b,c){return g.current.useSyncExternalStore(a,b,c)};c.useTransition=function(){return g.current.useTransition()};c.version="18.3.1"});
+ })();
